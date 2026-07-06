@@ -1,0 +1,31 @@
+plugins {
+    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
+    id 'org.spongepowered.mixin' version '0.7.+'
+}
+
+version = '1.0.0'
+group = 'com.github.L_Ender.cataclysm.microfix'
+archivesBaseName = 'ancient_remnant_fix'
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+minecraft {
+    mappings channel: 'official', version: '1.20.1'
+}
+
+mixin {
+    add sourceSets.main, 'ancient_remnant_fix.refmap.json'
+    config 'ancient_remnant_fix.mixins.json'
+}
+
+dependencies {
+    minecraft 'net.minecraftforge:forge:1.20.1-47.3.0'
+}
+
+jar {
+    manifest {
+        attributes([
+            'MixinConfigs': 'ancient_remnant_fix.mixins.json'
+        ])
+    }
+}

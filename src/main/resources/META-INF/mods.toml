@@ -1,0 +1,30 @@
+modLoader="javafml"
+loaderVersion="[46,)"
+
+[[mods]]
+modId="ancient_remnant_fix"
+version="1.0.0"
+displayName="Ancient Remnant Fix"
+description="Prevents Ancient Remnant from destroying Ancient Debris during charge. It will crash and stop instead."
+authors=["wbh"]
+
+[[dependencies.ancient_remnant_fix]]
+    modId="cataclysm"
+    mandatory=true
+    versionRange="[1.0,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.ancient_remnant_fix]]
+    modId="forge"
+    mandatory=true
+    versionRange="[46,)"
+    ordering="NONE"
+    side="BOTH"
+
+[[dependencies.ancient_remnant_fix]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.20.1,)"
+    ordering="NONE"
+    side="BOTH"
