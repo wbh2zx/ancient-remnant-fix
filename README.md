@@ -1,37 +1,43 @@
 # Ancient Remnant Fix
 
-Minecraft Forge 1.20.1 Mixin mod — prevents the Ancient Remnant (Cataclysm mod) from destroying Ancient Debris blocks when using the charge ability via The Fool (Age of Mythology) morph mod.
+Minecraft Forge 1.20.1 Mixin 微型补丁。  
+修复使用 **愚者（The Fool / Age of Mythology）** 变身模组变身为 **灾变（L_Ender's Cataclysm）** 的远古遗魂时，冲撞技能错误破坏远古残骸的问题。
 
-## Problem
+## 涉及模组
 
-When using The Fool mod to morph into an Ancient Remnant from L_Ender's Cataclysm, the charge ability destroys Ancient Debris blocks. According to official Cataclysm lore, Ancient Debris should stop the Ancient Remnant's charge.
+| Mod | 中文名 | 版本 | 作用 |
+|-----|--------|------|------|
+| L_Ender's Cataclysm | 灾变 | 3.16 | 提供远古遗魂实体和冲撞技能 |
+| Age of Mythology | 愚者 / The Fool | 0.2.1 | 提供变身系统，内含 bettermorph |
 
-## Root Cause
+## 问题
 
-The Fool mod's morph system reimplements the Ancient Remnant's charge block-breaking logic in `MorphUtil.ChargeBlockBreaking()` — it does NOT call Cataclysm's original `ChargeBlockBreaking` method. This custom implementation lacks the Ancient Debris immunity check.
+远古遗魂的官方设定是：冲撞遇到远古残骸会停下。但使用愚者变身成古遗魂后，冲撞会把远古残骸直接破坏。
 
-## Fix
+根因：愚者的变身系统在 `MorphUtil.ChargeBlockBreaking()` 中**自己重新实现**了一套方块破坏逻辑，完全绕过了灾变原版的同名方法。这套自实现缺少对远古残骸的保护。
 
-Mixin injects a pre-scan at the head of `MorphUtil.ChargeBlockBreaking(LivingEntity, double, boolean)`. Before any blocks are destroyed, it scans the entity's bounding box for Ancient Debris. If found, the entity's horizontal velocity is zeroed and the method returns immediately, leaving all blocks intact.
+## 修复方式
 
-## Compatibility
+Mixin 注入 `MorphUtil.ChargeBlockBreaking(LivingEntity, double, boolean)`，在方法入口扫描实体周围的方块。检测到远古残骸时，取消本次方块破坏并将实体水平速度归零。
+
+## 安装
+
+将 `ancient_remnant_fix-1.0.0.jar` 放入 `mods` 文件夹即可。
+
+## 兼容
 
 - Minecraft 1.20.1
 - Forge 47.x
-- L_Ender's Cataclysm 3.16
-- The Fool (Age of Mythology) 0.2.1
+- 灾变 (L_Ender's Cataclysm) 3.16
+- 愚者 (Age of Mythology) 0.2.1
 
-## Installation
-
-Place `ancient_remnant_fix-1.0.0.jar` in your `mods` folder.
-
-## Building
+## 构建
 
 ```bash
 ./gradlew build
 ```
 
-Requires the following jars in `libs/`:
+需在 `libs/` 下放置：
 - `L_Enders_Cataclysm-3.16.jar`
 - `ageofmythology-0.2.1-all.jar`
 
